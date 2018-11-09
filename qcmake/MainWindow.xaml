@@ -5,8 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:qcmake"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="qcmake" Height="450" Width="800">
     <Grid>
-        
+        <Button x:Name="ChooseMakeExe_Location_Button" Content="Browse" HorizontalAlignment="Left" Margin="727,71,0,0" VerticalAlignment="Top" Width="58" Height="23" Click="ChooseMakeExe_Location_Click" FontSize="16"/>
+        <TextBox x:Name="MakeExe_Location" HorizontalAlignment="Left" Height="23" Margin="156,71,0,0" TextWrapping="Wrap" Text="make" VerticalAlignment="Top" Width="566" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,71,0,0" TextWrapping="Wrap" Text="make.exe = " VerticalAlignment="Top" Width="141" Height="23" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="QCMake" VerticalAlignment="Top" FontFamily="OCR A Extended" Width="775" Height="56" TextAlignment="Center" FontSize="55"/>
+        <ComboBox x:Name="Language" HorizontalAlignment="Left" Margin="727,257,0,0" VerticalAlignment="Top" Width="58" SelectedIndex="0" Height="23">
+            <TextBlock Text="C#" FontFamily="Consolas"/>
+        </ComboBox>
+        <Button x:Name="ChooseCodeDir_Button" Content="Browse" HorizontalAlignment="Left" Margin="727,133,0,0" VerticalAlignment="Top" Width="58" Height="23" FontSize="16" Click="ChooseCodeDir_Click"/>
+        <TextBox x:Name="CodeDir" HorizontalAlignment="Left" Height="23" Margin="156,133,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="566" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,133,0,0" TextWrapping="Wrap" Text="Code Directory" VerticalAlignment="Top" Width="141" Height="23" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="141" Height="63" FontFamily="Consolas" FontSize="18"><Run/><LineBreak/><Run Text="Code Files"/></TextBlock>
+        <TextBox x:Name="CodeFiles" HorizontalAlignment="Left" Height="63" Margin="156,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="566" FontFamily="Consolas" FontSize="18"/>
+        <Button x:Name="ChooseCodeFiles_Button" Content="Browse" HorizontalAlignment="Left" Margin="727,161,0,0" VerticalAlignment="Top" Width="58" Height="63" FontSize="16" Click="ChooseCodeFiles_Click"/>
+        <Button x:Name="Make_Makefile_Button" Content="Make Makefile" HorizontalAlignment="Left" Margin="156,257,0,0" VerticalAlignment="Top" Width="112" Height="23" FontSize="16" Click="Make_Makefile_Button_Click"/>
+        <Button x:Name="Make_Project_Button" Content="Make Project" HorizontalAlignment="Left" Margin="493,257,0,0" VerticalAlignment="Top" Width="112" Height="23" FontSize="16" RenderTransformOrigin="0.336,1.757" Click="Make_Project_Button_Click"/>
+        <Button x:Name="Clean_Project_Button" Content="Clean Project" HorizontalAlignment="Left" Margin="610,257,0,0" VerticalAlignment="Top" Width="112" Height="23" FontSize="16" Click="Clean_Project_Button_Click"/>
+        <Button x:Name="ChooseQcExe_Location_Button" Content="Browse" HorizontalAlignment="Left" Margin="727,99,0,0" VerticalAlignment="Top" Width="58" Height="23" FontSize="16" Click="ChooseQcExe_Location_Button_Click"/>
+        <TextBox x:Name="QcExe_Location" HorizontalAlignment="Left" Height="23" Margin="156,99,0,0" TextWrapping="Wrap" Text="qc" VerticalAlignment="Top" Width="566" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="141" Height="23" FontFamily="Consolas" FontSize="18"><Run Text="qc"/><Run Text=".exe = "/></TextBlock>
+        <Button x:Name="ChooseExtraMakeFile_Button" Content="Browse" HorizontalAlignment="Left" Margin="727,229,0,0" VerticalAlignment="Top" Width="58" Height="23" FontSize="16" Click="ChooseExtraMakeFile_Button_Click"/>
+        <TextBox x:Name="ExtraMakeFile" HorizontalAlignment="Left" Height="23" Margin="156,229,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="566" FontFamily="Consolas" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,229,0,0" TextWrapping="Wrap" Text="MakeFile Extra" VerticalAlignment="Top" Width="141" Height="23" FontFamily="Consolas" FontSize="18"/>
     </Grid>
 </Window>
