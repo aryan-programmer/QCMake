@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "qcmake", "qcmake\qcmake.csproj", "{7EE92209-FA4E-4355-B0FA-95CFDDE1B714}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QCMake", "QCMake\QCMake.csproj", "{7EE92209-FA4E-4355-B0FA-95CFDDE1B714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
