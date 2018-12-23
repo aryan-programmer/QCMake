@@ -14,64 +14,50 @@ using TCEA = System.Windows.Controls.TextChangedEventArgs;
 
 namespace QCMake
 {
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		[Serializable]
-		public class UnknownException : Exception
+		public class ProgramException : Exception
 		{
-			public UnknownException( ) { }
-			public UnknownException( string message ) : base( message ) { }
-			public UnknownException( string message , Exception inner ) : base( message , inner ) { }
-			protected UnknownException(
+			public ProgramException( ) { }
+			public ProgramException( string message ) : base( message ) { }
+			public ProgramException( string message , Exception inner ) : base( message , inner ) { }
+			protected ProgramException(
 			  System.Runtime.Serialization.SerializationInfo info ,
 			  System.Runtime.Serialization.StreamingContext context ) : base( info , context ) { }
 		}
 
-		public const string literal_cs = "C#", literal_cpp = "C++17";
+		private const string literal_cs = "C#", literal_cpp = "C++17";
 
-		public static readonly StrDict
-			fileNameExtentions = new StrDict
-			{
-				[ "C#" ] = ".cs" ,
-				[ "C++17" ] = "" ,
-			}, langaugeSpecForLanguage = new StrDict
-			{
-				[ "C#" ] = "CS" ,
-				[ "C++17" ] = "CPP17WithBoost" ,
-			};
-		public static readonly Dictionary<string , StrDict> QCExtention_Language_Extention = new Dictionary<string , StrDict>
+		private static readonly StrDict langaugeSpecForLanguage = new StrDict
 		{
+			[ literal_cs ] = "CS" ,
+			[ literal_cpp ] = "CPP17WithBoost" ,
+		};
+		private static readonly Dictionary<string , StrDict> QCExtention_Language_Extention = new Dictionary<string , StrDict>
+		{
+			[ ".qc" ] = new StrDict
 			{
-				".qc" , new Dictionary<string, string>
-				{
-					{literal_cs,".cs" },
-					{literal_cpp,".cpp" },
-				}
-			},
+				[ literal_cs ] = ".cs" ,
+				[ literal_cpp ] = ".cpp" ,
+			} ,
+			[ ".sqc" ] = new StrDict
 			{
-				".sqc" , new Dictionary<string, string>
-				{
-					{literal_cs,".cs" },
-					{literal_cpp,".cpp" },
-				}
-			},
+				[ literal_cs ] = ".cs" ,
+				[ literal_cpp ] = ".cpp" ,
+			} ,
+			[ ".hqc" ] = new StrDict
 			{
-				".hqc" , new Dictionary<string, string>
-				{
-					{literal_cs,".cs" },
-					{literal_cpp,".hpp" },
-				}
-			},
+				[ literal_cs ] = ".cs" ,
+				[ literal_cpp ] = ".hpp" ,
+			} ,
+			[ ".uqc" ] = new StrDict
 			{
-				".uqc" , new Dictionary<string, string>
-				{
-					{ literal_cs,".cs" },
-					{ literal_cpp,".hpp" },
-				}
+				[ literal_cs ] = ".cs" ,
+				[ literal_cpp ] = ".cpp" ,
 			}
 		};
-		public static readonly HashSet<string> validExtentions = new HashSet<string> { ".qc" , ".sqc" , ".hqc" , ".uqc" };
+		private static readonly HashSet<string> validExtentions = new HashSet<string> { ".qc" , ".sqc" , ".hqc" , ".uqc" };
 
 		public string OutputText
 		{
@@ -115,14 +101,14 @@ namespace QCMake
 		private void Make_Makefile_Button_Click( Obj sender , REA e )
 		{
 			OutputLn( $@"Started creating makefile for ""{CodeDir.Text}""." );
-			using ( StreamWriter writer = new StreamWriter( CodeDir.Text + @"\Makefile" ) )
+			using ( var writer = new StreamWriter( CodeDir.Text + @"\Makefile" ) )
 			{
 				// The language specified
-				string language = 
+				var language =
 					// Get the selected language, cast as a TextBlock with "as"
 					( LanguageBox.SelectedItem as TextBlock )
 					// Safely get the text
-					?.Text ?? 
+					?.Text ??
 					// If the text is null we throw a ArgumentNullException
 					throw new ArgumentNullException( "No language selected." );
 				// Write the start variable values
@@ -132,25 +118,25 @@ ENDING_FLAGS = --language {langaugeSpecForLanguage[ language ]}
 
 " );
 				// The files with a valid extension
-				FileInfo[ ] files =
+				var files =
 					(
 					// For all the files in the code directory
 					from file in new DirectoryInfo( CodeDir.Text ).GetFiles()
-					// Where the file's extension is a valid one.
+						// Where the file's extension is a valid one.
 					where validExtentions.Contains( file.Extension )
 					// Select it
 					select file
 					).ToArray();
-				string[ ] cnvFiles =
+				var cnvFiles =
 					(
 					// For all the files
 					from file in files
-					// Remove the extension and add the new one.
+						// Remove the extension and add the new one.
 					select file.Name.Substring(
 						0 , file.Name.Length - file.Extension.Length ) +
 						QCExtention_Language_Extention[ file.Extension ][ language ] ).ToArray();
-				// For all the files 
-				for ( int i = 0; i < files.Length; i++ )
+				// For all the files
+				for ( var i = 0; i < files.Length; i++ )
 				{
 					// Write the appropriate make file target
 					writer.Write( $@"{cnvFiles[ i ]}: {files[ i ].Name}
@@ -178,7 +164,7 @@ clean:
 		private void Make_Project_Button_Click( Obj sender , REA e )
 		{
 			OutputLn( $@"Running makefile for ""{CodeDir.Text}""." );
-			ProcessStartInfo processStartInfo = new ProcessStartInfo
+			var processStartInfo = new ProcessStartInfo
 			{
 				UseShellExecute = false ,
 				FileName = MakeExe_Location.Text ,
@@ -188,17 +174,17 @@ clean:
 				RedirectStandardOutput = true ,
 				RedirectStandardError = true
 			};
-			Process proc = Process.Start( processStartInfo );
+			var proc = Process.Start( processStartInfo );
 			proc.WaitForExit();
 			OutputLn( proc.StandardOutput.ReadToEnd() );
 			if ( proc.ExitCode != 0 )
 			{
-				string writeStr = $@"Process exited with exit code: {proc.ExitCode}.
+				var writeStr = $@"Process exited with exit code: {proc.ExitCode}.
 Error:
 {proc.StandardError.ReadToEnd()}";
 				OutputLn( "Error: " + writeStr );
 				OutputLn( $@"Failed to run makefile for ""{CodeDir.Text}""." );
-				throw new UnknownException( writeStr );
+				throw new ProgramException( writeStr );
 			}
 			OutputLn( $@"Finished running makefile for ""{CodeDir.Text}""." );
 		}
@@ -215,9 +201,9 @@ Error:
 		{
 			var path = folderPath +
 					$@"\QCMakeLogFor[{ProjectName.Text}].txt";
-			OutputLn( $"Saved output to file." );
-			using ( StreamWriter writer = new StreamWriter( path ) )
+			using ( var writer = new StreamWriter( path ) )
 				writer.Write( Output.Text );
+			OutputLn( $"Saved output to file." );
 		}
 
 		private void ClearOutput( Obj sender , REA e ) => Output.Text = "";
@@ -235,7 +221,7 @@ Error:
 
 		private void ProjectName_KeyDown( object sender , System.Windows.Input.KeyEventArgs e )
 		{
-			if(e.Key == System.Windows.Input.Key.Enter )
+			if ( e.Key == System.Windows.Input.Key.Enter )
 				OutputLn( $@"Set project name to ""{ProjectName.Text}""." );
 		}
 
@@ -244,7 +230,7 @@ Error:
 		private void Clean_Project_Button_Click( Obj sender , REA e )
 		{
 			OutputLn( $@"Cleaning generated files for ""{CodeDir.Text}""." );
-			ProcessStartInfo processStartInfo = new ProcessStartInfo
+			var processStartInfo = new ProcessStartInfo
 			{
 				UseShellExecute = false ,
 				FileName = MakeExe_Location.Text ,
@@ -254,16 +240,16 @@ Error:
 				RedirectStandardOutput = true ,
 				RedirectStandardError = true
 			};
-			Process proc = Process.Start( processStartInfo );
+			var proc = Process.Start( processStartInfo );
 			proc.WaitForExit();
 			if ( proc.ExitCode != 0 )
 			{
-				string writeStr = $@"Process exited with exit code: {proc.ExitCode}.
+				var writeStr = $@"Process exited with exit code: {proc.ExitCode}.
 Error:
 {proc.StandardError.ReadToEnd()}";
 				OutputLn( "Error: " + writeStr );
 				OutputLn( $@"Failed to clean generated files for ""{CodeDir.Text}""." );
-				throw new UnknownException( writeStr );
+				throw new ProgramException( writeStr );
 			}
 			OutputLn( $@"Finished cleaning generated files for ""{CodeDir.Text}""." );
 		}

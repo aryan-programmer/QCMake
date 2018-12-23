@@ -3324,7 +3324,7 @@ select new {
 warnif count > 0 from t in JustMyCode.Types where 
   t.IsNested && 
  !t.IsGeneratedByCompiler &&
- !t.IsPrivate 
+ !t.IsPrivate && !t.IsExceptionClass
 let typesUser = t.TypesUsingMe.Where(t1 => t1 != t.ParentType && t1.ParentType != t.ParentType)
 select new { 
    t, 
