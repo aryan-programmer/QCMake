@@ -1,0 +1,1 @@
+QCMake is also developed for generating Makefile for the QC project. It eventually calls qc.exe to convert QC project files to other higher-level programming language.
